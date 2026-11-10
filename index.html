@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,12 +10,14 @@ body{font-family:Tahoma,Arial,sans-serif;background:var(--bg);margin:0;padding:1
 .header{background:var(--navy);color:#fff;padding:15px;border-radius:0 0 14px 14px;text-align:center}
 .card{background:#fff;border-radius:12px;padding:12px;margin:10px 0;box-shadow:0 2px 5px #0001;border-top:4px solid var(--navy)}
 .card.green{border-color:var(--green)}
+.card.gold{border-color:#e5a900}
 label{font-weight:bold;display:block;margin:7px 0}
 textarea,input,select{width:100%;padding:11px;border:2px solid #ccc;border-radius:9px;font:14px Tahoma,Arial}
 textarea{resize:vertical;line-height:1.6}
 button{border:0;padding:12px;border-radius:9px;font-weight:bold;color:white;background:var(--navy);cursor:pointer;font-size:15px;margin:5px 0;width:100%}
 button.green{background:#168747}
 button.light{background:#526579}
+button.gold{background:#c58b00}
 .badges{display:flex;gap:5px;flex-wrap:wrap}
 .badge{padding:6px 10px;border-radius:20px;background:#edf1f7;font-size:12px}
 .help{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:9px;font-size:12px;line-height:1.7}
@@ -29,21 +30,65 @@ td.center{text-align:center}
 .result-group{border:1px solid #dce4eb;border-radius:9px;margin:9px 0;overflow:hidden}
 .result-group h4{margin:0;background:#eaf1f8;padding:10px;color:var(--navy)}
 .result-group p{padding:0 10px;line-height:1.8}
-#preview{white-space:pre-wrap;word-break:break-word;background:#f7f9fc;border:1px solid #ddd;border-radius:8px;padding:10px;max-height:280px;overflow:auto;font-size:13px}
+#preview{white-space:pre-wrap;word-break:break-word;background:#f7f9fc;border:1px solid #ddd;border-radius:8px;padding:10px;max-height:280px;overflow:auto;font-size:13px}/* ⭐ تنسيق نجوم مباريات اليوم */
+.star-banner{
+background:linear-gradient(135deg,#0b2e59,#1764a5);
+color:white;
+border-radius:11px;
+padding:15px;
+text-align:center;
+margin:10px 0;
+}
+.star-banner h3{margin:0 0 8px;font-size:21px}
+.star-banner p{margin:4px 0;font-size:13px}
+.star-table{
+width:100%;
+min-width:0;
+border-collapse:collapse;
+margin-top:12px;
+}
+.star-table th{
+background:#c58b00;
+color:white;
+padding:11px 5px;
+}
+.star-table td{
+padding:11px 5px;
+text-align:center;
+border:1px solid #e8dfc5;
+}
+.star-table tr:nth-child(even){background:#fff9e9}
+.star-rank{
+font-size:17px;
+font-weight:bold;
+color:#c58b00;
+}
+.star-name{
+font-weight:bold;
+color:#0b2e59;
+}
+.star-hits{
+font-weight:bold;
+color:#168747;
+}
+.star-empty{
+background:#fff8e6;
+padding:15px;
+border-radius:9px;
+text-align:center;
+line-height:1.9;
+}
 @media(min-width:760px){
 body{max-width:1000px;margin:auto}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 }
 </style>
-</head>
-<body>
 
-<div class="header">
+</head>
+<body><div class="header">
 <h2>🔥 صدى العندليب</h2>
 <p>فرز عام للتوقعات — رسائل متلاصقة — نتائج كاملة أو مباريات لم تُلعب بعد</p>
-</div>
-
-<div class="two">
+</div><div class="two">
 <section class="card">
 <label>📋 القسم الأول: الصق رسائل توقعات المشاركين</label>
 <textarea id="allBox" rows="15" placeholder="الصق هنا رسائل توقعات المشاركين المتتالية، 80 أو 200 رسالة أو أكثر..."></textarea>
@@ -52,9 +97,7 @@ body{max-width:1000px;margin:auto}
 <span class="badge" id="parsedCount">0 توقع مقروء</span>
 </div>
 <p class="help">البرنامج ذكي ويتعرف تلقائياً على نهاية كل كليشة عند رؤية كلمة "الاسم :" أو "الأسم :" في السطر الأخير.</p>
-</section>
-
-<section class="card green">
+</section><section class="card green">
 <label>✅ القسم الثاني: الصق كليشة النتائج الصحيحة (بدون اسم)</label>
 <textarea id="correctBox" rows="15" placeholder="الصق كليشة النتائج الصحيحة:
 *ميلان [1]*
@@ -63,9 +106,7 @@ body{max-width:1000px;margin:auto}
 *يوفنتوس [ ]*"></textarea>
 <p class="help">المباراة التي نتيجتها مكتوبة تُعدّ مكتملة. اترك خانات الفريقين فارغة للمباراة التي لم تنتهِ.</p>
 </section>
-</div>
-
-<section class="card">
+</div><section class="card">
 <label>خيارات الفرز</label>
 <div class="two">
 <div>
@@ -90,9 +131,7 @@ body{max-width:1000px;margin:auto}
 <span class="badge" id="winnersCount">0 نتيجة مطابقة</span>
 </div>
 <div id="status">ألصق الكليشتين ثم اضغط فرز التوقعات.</div>
-</section>
-
-<section class="card" id="liveCard">
+</section><!-- متابعة المباراة --><section class="card" id="liveCard">
 <h3>⏱️ متابعة المباراة بالدقائق</h3>
 <p class="help">أدخل المباراة الحالية والدقيقة والنتيجة. التصنيفات تقديرية أثناء اللعب، ولا تُحتسب نقاط اليوم إلا بعد اعتماد النتيجة النهائية.</p>
 <div class="two">
@@ -122,9 +161,7 @@ body{max-width:1000px;margin:auto}
 <span class="badge" id="liveOutCount">0 مستبعد</span>
 </div>
 <div id="liveResults"></div>
-</section>
-
-<section class="card">
+</section><section class="card">
 <h3>🏅 ترتيب المشاركين — توقعات اليوم</h3>
 <p class="help">كل إصابة تساوي نقطتين افتراضيًا، ويمكن تغيير القيمة أعلاه.</p>
 <div class="tablewrap">
@@ -135,9 +172,28 @@ body{max-width:1000px;margin:auto}
 </tbody>
 </table>
 </div>
-</section>
-
-<section class="card">
+</section><!-- ⭐ القسم الجديد: نجوم مباريات اليوم --><section class="card gold" id="todayStarsCard">
+<div class="star-banner">
+<h3>⭐ نجوم مباريات اليوم ⭐</h3>
+<p>تكريم المشاركين الأكثر دقة في توقعات مباريات اليوم</p>
+</div><p class="help">
+بعد إدخال نتائج المباريات المكتملة وتنفيذ الفرز، اضغط الزر لاستخراج أسماء المشاركين الذين أصابوا مباراتين أو أكثر.
+</p><button class="gold" id="todayStarsBtn">
+⭐ استخراج نجوم مباريات اليوم
+</button><div id="todayStarsResults">
+<div class="star-empty">
+🏆 ستظهر هنا أسماء المشاركين الذين أصابوا مباراتين أو أكثر.
+<br>
+نفّذ الفرز أولاً ثم اضغط زر استخراج النجوم.
+</div>
+</div><button class="green" id="todayStarsWaBtn">
+🟢 مشاركة نجوم مباريات اليوم عبر واتساب
+</button><button class="light" id="todayStarsImageBtn">
+🖼️ إنشاء صورة نجوم مباريات اليوم
+</button><button class="light" id="todayStarsShareImageBtn">
+📤 مشاركة صورة نجوم مباريات اليوم
+</button>
+</section><section class="card">
 <h3>📊 جدول النتائج العام</h3>
 <div class="badges">
 <span class="badge">يمكن نسخ الجدول</span>
@@ -159,20 +215,21 @@ body{max-width:1000px;margin:auto}
 <button class="light" id="csvBtn">⬇️ تنزيل الجدول CSV</button>
 <button class="light" id="imageBtn">🖼️ إنشاء صورة للجدول</button>
 <button class="light" id="shareImageBtn">📤 مشاركة صورة الجدول</button>
-</section>
-
-<section class="card">
+</section><section class="card">
 <h3>👑 أصحاب التوقع الكامل للنتائج المكتملة</h3>
 <p class="help">تُحسب القائمة فقط على المباريات التي أُدخلت نتيجتها الصحيحة.</p>
 <div id="perfectList">لم يتم الفرز بعد.</div>
 <button class="green" id="perfectWaBtn">🟢 إرسال أصحاب التوقع الكامل عبر واتساب</button>
 <button class="light" id="perfectImageBtn">🖼️ إنشاء صورة لأصحاب التوقع الكامل</button>
-</section>
-
-<script>
+</section><script>
 const $=id=>document.getElementById(id);
 
 let lastSummary=[],lastPerfect=[],lastText='',lastCorrect=[],lastRank=[],lastPeople=[],lastKnown=[];
+
+/* متغيرات الإحصائية الجديدة */
+let lastTodayStars=[];
+let lastTodayStarText='';
+let lastTodayStarDate='';
 
 function stripBidi(s){
 return String(s||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\u061c\uFEFF]/g,'');
@@ -198,7 +255,7 @@ return clean(s)
 }
 
 // ==========================================
-// 🔴 دالة الفصل الجديدة (تعتمد على نهاية سطر الاسم)
+// 🔴 دالة الفصل الجديدة
 // ==========================================
 function splitParticipants(text) {
     text = stripBidi(text).replace(/\r/g, '');
@@ -212,17 +269,14 @@ function splitParticipants(text) {
         let line = lines[i];
         currentBlock.push(line);
 
-        // إذا وجدنا سطر يحتوي على كلمة "الأسم" أو "الاسم" أو "الإسم"
         if (/(?:الأسم|الاسم|الإسم)\s*[:：]/i.test(line)) {
-            // إذا كان هذا هو أول سطر في الكتلة وكان مجرد عنوان، لا نقطعه
             if (currentBlock.length > 1 || i === lines.length - 1) {
                 blocks.push(currentBlock.join('\n').trim());
-                currentBlock = []; // تصفير الكتلة للبدء في الرسالة التالية
+                currentBlock = [];
             }
         }
     }
 
-    // إذا تبقى شيء في الكتلة الأخيرة ولم يتم إضافته
     if (currentBlock.length > 0) {
         let remaining = currentBlock.join('\n').trim();
         if (remaining.length > 0) {
@@ -246,8 +300,8 @@ function readScoreLine(line){
     let s=stripBidi(line).trim();
     if(!s)return null;
     s=s.replace(/[*_~`]/g,'').trim();
-    const left=/^\s*(.+?)\s*[\[【〔（(]\s*([0-9٠-٩۰-۹]*)\s*[\]】〕）)]\s*$/;
-    const right=/^\s*[\[【〔（(]\s*([0-9٠-٩۰-۹]*)\s*[\]】〕）)]\s*(.+?)\s*$/;
+    const left=/^\s*(.+?)\s*[【〔（(]\s*([0-9٠-٩۰-۹]*)\s*[】〕）)]\s*$/;
+    const right=/^\s*[【〔（(]\s*([0-9٠-٩۰-۹]*)\s*[】〕）)]\s*(.+?)\s*$/;
     let m=s.match(left),team,score;
     if(m){
         team=m[1];
@@ -269,8 +323,8 @@ function readScoreLine(line){
 function parsePenaltyWinners(text){
     const out=[];
     const patterns=[
-        /(?:فوز|فاز)\s+(?:فريق\s+)?([^\n*\[\]،؛]+?)\s+(?:بضربات\s+الجزاء|بركلات\s+الترجيح|بركلات\s+الجزاء|بالترجيح|ضربات\s+الجزاء)/gi,
-        /([^\n*\[\]،؛]+?)\s+(?:يفوز|فاز)\s+(?:بضربات\s+الجزاء|بركلات\s+الترجيح|بركلات\s+الجزاء|بالترجيح)/gi
+        /(?:فوز|فاز)\s+(?:فريق\s+)?([^\n*،؛]+?)\s+(?:بضربات\s+الجزاء|بركلات\s+الترجيح|بركلات\s+الجزاء|بالترجيح|ضربات\s+الجزاء)/gi,
+        /([^\n*،؛]+?)\s+(?:يفوز|فاز)\s+(?:بضربات\s+الجزاء|بركلات\s+الترجيح|بركلات\s+الجزاء|بالترجيح)/gi
     ];
     for(const re of patterns){
         let m;
@@ -447,6 +501,12 @@ function runSort(){
     lastPeople=people;
     lastKnown=known;
 
+    /* إعادة ضبط نتيجة النجوم عند إجراء فرز جديد */
+    lastTodayStars=[];
+    lastTodayStarText='';
+    $('todayStarsResults').innerHTML=
+    '<div class="star-empty">تم تحديث الفرز. اضغط زر استخراج نجوم مباريات اليوم لاحتساب الإحصائية الجديدة.</div>';
+
     $('rankBody').innerHTML=lastRank.map((p,i)=>
     `<tr><td class="center">${i+1}</td><td>${esc(p.name)}</td><td class="center">${p.hits}/${p.total}</td><td class="center"><b>${p.score}</b></td></tr>`
     ).join('');
@@ -473,6 +533,202 @@ function runSort(){
 
     lastText=makeSummaryText();
 }
+
+/* ==========================================
+   ⭐ الميزة الجديدة: استخراج نجوم مباريات اليوم
+   ========================================== */
+
+function extractTodayStars(){
+
+    if(!lastPeople.length || !lastCorrect.length){
+        alert('نفّذ فرز التوقعات أولاً.');
+        return;
+    }
+
+    const known=lastCorrect.filter(resultKnown);
+
+    if(!known.length){
+        alert('لا توجد مباريات مكتملة لاحتساب النجوم.');
+        return;
+    }
+
+    const mode=$('matchMode').value;
+
+    const stars=[];
+
+    lastPeople.forEach(p=>{
+
+        let hits=0;
+        const hitMatches=[];
+        const used=new Set();
+
+        known.forEach(cm=>{
+
+            const pm=matchParticipantGame(
+                p,
+                cm,
+                mode,
+                used
+            );
+
+            if(pm)used.add(pm.index);
+
+            if(isCorrect(pm,cm)){
+                hits++;
+
+                hitMatches.push(
+                    cm.a.team+' '+cm.a.score+' - '+
+                    cm.b.score+' '+cm.b.team
+                );
+            }
+
+        });
+
+        if(hits>=2){
+
+            stars.push({
+                name:p.name,
+                hits:hits,
+                total:known.length,
+                matches:hitMatches
+            });
+
+        }
+
+    });
+
+    stars.sort((a,b)=>
+        b.hits-a.hits ||
+        a.name.localeCompare(b.name,'ar')
+    );
+
+    lastTodayStars=stars;
+
+    const date=new Date().toLocaleDateString('ar-YE');
+
+    lastTodayStarDate=date;
+
+    let text=
+        '⭐🏆 نجوم مباريات اليوم — صدى العندليب 🏆⭐\n'+
+        '📅 التاريخ: '+date+'\n'+
+        '⚽ عدد المباريات المكتملة: '+known.length+'\n'+
+        '━━━━━━━━━━━━━━\n';
+
+    if(stars.length){
+
+        stars.forEach((p,i)=>{
+
+            text+=
+                (i+1)+'. '+p.name+
+                ' — '+p.hits+' من '+p.total+' مباريات صحيحة\n';
+
+        });
+
+        const max=stars[0].hits;
+
+        const leaders=stars.filter(p=>p.hits===max);
+
+        text+='━━━━━━━━━━━━━━\n';
+
+        if(leaders.length===1){
+            text+='👑 نجم اليوم: '+leaders[0].name+'\n';
+        }else{
+            text+='👑 نجوم اليوم: '+leaders.map(p=>p.name).join('، ')+'\n';
+        }
+
+    }else{
+
+        text+=
+            'لم يتم العثور على مشاركين أصابوا مباراتين أو أكثر اليوم.\n';
+
+    }
+
+    text+='━━━━━━━━━━━━━━\n🔥 صدى العندليب';
+
+    lastTodayStarText=text;
+
+    renderTodayStars(stars,known.length,date);
+
+}
+
+
+function renderTodayStars(stars,total,date){
+
+    const container=$('todayStarsResults');
+
+    if(!stars.length){
+
+        container.innerHTML=`
+        <div class="star-empty">
+            <h3>⭐ لا توجد أسماء ضمن قائمة النجوم حتى الآن</h3>
+            <p>لم يصب أي مشارك مباراتين أو أكثر من المباريات المكتملة.</p>
+            <p>عدد المباريات المكتملة: <b>${total}</b></p>
+        </div>`;
+
+        return;
+    }
+
+    const max=stars[0].hits;
+
+    const leaders=stars.filter(p=>p.hits===max);
+
+    let html=`
+    <div class="star-banner">
+        <h3>🏆 نجوم مباريات اليوم 🏆</h3>
+        <p>📅 ${esc(date)}</p>
+        <p>عدد المباريات المكتملة: ${total}</p>
+        <p>عدد المشاركين المميزين: ${stars.length}</p>
+    </div>
+
+    <div class="tablewrap">
+    <table class="star-table">
+    <thead>
+        <tr>
+            <th>المركز</th>
+            <th>اسم المشارك</th>
+            <th>الإصابات الصحيحة</th>
+        </tr>
+    </thead>
+    <tbody>`;
+
+    stars.forEach((p,i)=>{
+
+        let rank=i+1;
+
+        let medal='';
+
+        if(p.hits===max){
+            medal='⭐';
+        }
+
+        html+=`
+        <tr>
+            <td class="star-rank">${rank} ${medal}</td>
+            <td class="star-name">${esc(p.name)}</td>
+            <td class="star-hits">${p.hits} من ${p.total}</td>
+        </tr>`;
+
+    });
+
+    html+=`
+    </tbody>
+    </table>
+    </div>`;
+
+    html+=`
+    <div class="star-empty" style="margin-top:12px">
+        👑 <b>أعلى إصابة اليوم:</b><br>
+        ${leaders.map(p=>esc(p.name)).join(' — ')}
+        <br>
+        <b>${max} مباريات صحيحة</b>
+    </div>`;
+
+    container.innerHTML=html;
+
+}
+
+
+/* متابعة المباراة بالدقائق */
 
 function classifyLivePrediction(pm,cm,liveA,liveB){
     if(!pm)return 'out';
@@ -545,6 +801,79 @@ async function copyText(t){
 
 $('sortBtn').addEventListener('click',runSort);
 $('liveBtn').addEventListener('click',updateLive);
+
+/* أزرار الميزة الجديدة */
+$('todayStarsBtn').addEventListener('click',extractTodayStars);
+
+$('todayStarsWaBtn').addEventListener('click',()=>{
+
+    if(!lastTodayStarText){
+        alert('استخرج نجوم مباريات اليوم أولاً.');
+        return;
+    }
+
+    window.open(
+        'https://wa.me/?text='+encodeURIComponent(lastTodayStarText),
+        '_blank'
+    );
+
+});
+
+$('todayStarsImageBtn').addEventListener('click',()=>{
+
+    if(!lastTodayStarText){
+        alert('استخرج نجوم مباريات اليوم أولاً.');
+        return;
+    }
+
+    saveCanvas(
+        imageCanvas(lastTodayStarText)
+    );
+
+});
+
+$('todayStarsShareImageBtn').addEventListener('click',async()=>{
+
+    if(!lastTodayStarText){
+        alert('استخرج نجوم مباريات اليوم أولاً.');
+        return;
+    }
+
+    const c=imageCanvas(lastTodayStarText);
+
+    const blob=await new Promise(resolve=>
+        c.toBlob(resolve,'image/png')
+    );
+
+    const file=new File(
+        [blob],
+        'نجوم-مباريات-اليوم.png',
+        {type:'image/png'}
+    );
+
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+
+        try{
+
+            await navigator.share({
+                files:[file],
+                title:'نجوم مباريات اليوم',
+                text:'⭐ نجوم مباريات اليوم — صدى العندليب'
+            });
+
+        }catch(e){}
+
+    }else{
+
+        saveCanvas(c);
+
+        alert('تم إنشاء الصورة. افتح واتساب وأرفق الصورة المحفوظة.');
+
+    }
+
+});
+
+
 $('liveMatch').addEventListener('change',()=>{
     const m=lastCorrect[Number($('liveMatch').value)];
     if(m && resultKnown(m)){
@@ -552,28 +881,34 @@ $('liveMatch').addEventListener('change',()=>{
         $('liveScoreB').value=m.b.score;
     }
 });
+
 $('pointsPerMatch').addEventListener('change',()=>{
     if(lastPeople.length)runSort();
 });
+
 $('allBox').addEventListener('input',()=>{
     const p=parseAll();
     $('participants').textContent=p.length+' مشارك (مبدئي)';
     $('parsedCount').textContent=p.filter(x=>x.matches.length).length+' توقع مقروء';
 });
+
 $('copyBtn').onclick=()=>{
     if(!lastSummary.length){alert('افرز التوقعات أولاً');return;}
     copyText(lastText);
 };
+
 $('waBtn').onclick=()=>{
     if(!lastSummary.length){alert('افرز التوقعات أولاً');return;}
     window.open('https://wa.me/?text='+encodeURIComponent(lastText),'_blank');
 };
+
 $('perfectWaBtn').onclick=()=>{
     if(!lastSummary.length){alert('افرز التوقعات أولاً');return;}
     const t='👑 أصحاب التوقع الكامل — صدى العندليب\n'+
     (lastPerfect.length?lastPerfect.map((p,i)=>(i+1)+'. '+p.name).join('\n'):'لا يوجد حتى الآن');
     window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank');
 };
+
 $('csvBtn').onclick=()=>{
     if(!lastSummary.length){alert('افرز التوقعات أولاً');return;}
     const rows=[
@@ -636,10 +971,12 @@ $('imageBtn').onclick=()=>{
     if(!lastSummary.length){alert('افرز التوقعات أولاً');return;}
     saveCanvas(imageCanvas(makeImageText()));
 };
+
 $('perfectImageBtn').onclick=()=>{
     if(!lastSummary.length){alert('افرز التوقعات أولاً');return;}
     saveCanvas(imageCanvas(makeImageText(true)));
 };
+
 $('shareImageBtn').onclick=async()=>{
     if(!lastSummary.length){alert('افرز التوقعات أولاً');return;}
     const c=imageCanvas(makeImageText());
@@ -658,6 +995,5 @@ $('shareImageBtn').onclick=async()=>{
         alert('تم إنشاء الصورة. افتح واتساب وأرفق الصورة المحفوظة.');
     }
 };
-</script>
-</body>
+</script></body>
 </html>
