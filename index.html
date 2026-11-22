@@ -34,6 +34,50 @@ td.center{text-align:center}
 .result-group p{padding:0 10px;line-height:1.8}
 #preview{white-space:pre-wrap;word-break:break-word;background:#f7f9fc;border:1px solid #ddd;border-radius:8px;padding:10px;max-height:280px;overflow:auto;font-size:13px}
 
+/* فحص الأسماء والكليشات المكررة */
+.duplicate-box{margin-top:12px}
+.duplicate-title{
+background:#0b2e59;
+color:white;
+padding:11px;
+border-radius:9px;
+font-weight:bold;
+margin:12px 0 8px;
+}
+.duplicate-item{
+background:#f7f9fc;
+border:1px solid #dce4eb;
+border-right:4px solid #c58b00;
+border-radius:8px;
+padding:10px;
+margin:8px 0;
+line-height:1.9;
+font-size:13px;
+}
+.duplicate-item strong{color:#0b2e59}
+.duplicate-item .duplicate-meta{
+color:#168747;
+font-weight:bold;
+}
+.duplicate-empty{
+background:#eef8f0;
+border:1px solid #b8dfc0;
+padding:12px;
+border-radius:8px;
+text-align:center;
+line-height:1.9;
+margin:8px 0;
+}
+.duplicate-warning{
+background:#fff3cd;
+border:1px solid #ffc107;
+padding:10px;
+border-radius:8px;
+font-size:12px;
+line-height:1.8;
+margin-top:8px;
+}
+
 /* ⭐ تنسيق نجوم مباريات اليوم */
 .star-banner{
 background:linear-gradient(135deg,#0b2e59,#1764a5);
@@ -129,7 +173,10 @@ body{max-width:1000px;margin:auto}
 </div>
 </div>
 
+<div class="two">
 <button id="sortBtn">🏆 فرز التوقعات</button>
+<button class="gold" id="duplicateBtn">🔍 فحص الأسماء والكليشات المكررة</button>
+</div>
 
 <div class="badges">
 <span class="badge" id="matchCount">0 مباراة مكتملة</span>
@@ -137,6 +184,8 @@ body{max-width:1000px;margin:auto}
 </div>
 
 <div id="status">ألصق الكليشتين ثم اضغط فرز التوقعات.</div>
+
+<div id="duplicateResults"></div>
 </section>
 
 <!-- متابعة المباراة -->
@@ -362,7 +411,6 @@ if(!s)return null;
 
 s=s.replace(/[*_~`]/g,'').trim();
 
-/* تم إصلاح الأقواس هنا */
 const left=/^\s*(.+?)\s*[\[【〔（(]\s*([0-9٠-٩۰-۹]*)\s*[\]】〕）)]\s*$/;
 const right=/^\s*[\[【〔（(]\s*([0-9٠-٩۰-۹]*)\s*[\]】〕）)]\s*(.+?)\s*$/;
 
@@ -511,6 +559,201 @@ function esc(s){
 return String(s).replace(/[&<>"']/g,c=>({
 '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 }[c]));
+}
+
+/* =========================================
+   فحص الأسماء والكليشات المكررة
+========================================= */
+
+// تطبيع الكليشة للمقارنة مع تجاهل سطر الاسم
+function normalizePrediction(block){
+
+return stripBidi(block)
+.replace(/\r/g,'')
+.split('\n')
+.filter(line=>!/(?:الإسم|الاسم|الأسم)\s*[:：]/i.test(line))
+.map(line=>{
+return digits(clean(line))
+.replace(/[()[\]{}【】〔〕（）<>「」]/g,' ')
+.replace(/[^\u0600-\u06FFa-z0-9\s]/gi,' ')
+.replace(/\s+/g,' ')
+.trim();
+})
+.filter(Boolean)
+.join('|');
+
+}
+
+// فحص التكرار وعرض التقرير
+function checkDuplicates(){
+
+const people=parseAll();
+
+if(!people.length){
+alert('الصق رسائل المشاركين أولاً ثم اضغط فحص الأسماء.');
+return;
+}
+
+// تجميع الأسماء المتكررة
+const nameMap=new Map();
+
+people.forEach((p,i)=>{
+
+const key=clean(p.name);
+
+if(!key)return;
+
+if(!nameMap.has(key)){
+nameMap.set(key,{
+name:p.name,
+numbers:[]
+});
+}
+
+nameMap.get(key).numbers.push(i+1);
+
+});
+
+// استخراج الأسماء التي تكررت
+const repeatedNames=[...nameMap.values()]
+.filter(item=>item.numbers.length>1);
+
+// تجميع الكليشات المتطابقة
+const predictionMap=new Map();
+
+people.forEach((p,i)=>{
+
+const key=normalizePrediction(p.block);
+
+// تجاهل الرسائل التي لا تحتوي على توقعات قابلة للمقارنة
+if(!key)return;
+
+if(!predictionMap.has(key)){
+predictionMap.set(key,{
+names:[],
+numbers:[]
+});
+}
+
+predictionMap.get(key).names.push(p.name);
+predictionMap.get(key).numbers.push(i+1);
+
+});
+
+// استخراج الكليشات التي تكررت
+const repeatedPredictions=[...predictionMap.values()]
+.filter(item=>item.numbers.length>1);
+
+// بناء التقرير
+let html=`
+<div class="duplicate-box">
+
+<div class="duplicate-title">
+🔍 تقرير فحص التكرار
+</div>
+
+<div class="badges">
+<span class="badge">📨 عدد الرسائل: ${people.length}</span>
+<span class="badge">👥 أسماء مكررة: ${repeatedNames.length}</span>
+<span class="badge">📋 كليشات مكررة: ${repeatedPredictions.length}</span>
+</div>
+
+<div class="duplicate-warning">
+الفحص لا يحذف أي رسالة ولا يغيّر بيانات المشاركين.
+أرقام الرسائل تشير إلى ترتيب الكليشة في النص الذي لصقته.
+</div>
+
+<div class="duplicate-title">
+👥 أولاً: الأسماء التي أرسلت أكثر من مرة
+</div>
+`;
+
+if(repeatedNames.length){
+
+repeatedNames.forEach((item,i)=>{
+
+html+=`
+<div class="duplicate-item">
+<strong>${i+1}. ${esc(item.name)}</strong>
+<br>
+<span class="duplicate-meta">
+عدد الرسائل: ${item.numbers.length}
+</span>
+<br>
+أرقام الرسائل: ${item.numbers.join('، ')}
+</div>
+`;
+
+});
+
+}else{
+
+html+=`
+<div class="duplicate-empty">
+✅ لا توجد أسماء مكررة.
+</div>
+`;
+
+}
+
+html+=`
+<div class="duplicate-title">
+📋 ثانياً: الكليشات المتطابقة بالكامل
+</div>
+`;
+
+if(repeatedPredictions.length){
+
+repeatedPredictions.forEach((item,i)=>{
+
+html+=`
+<div class="duplicate-item">
+<strong>الكليشة المكررة رقم ${i+1}</strong>
+<br>
+<span class="duplicate-meta">
+عدد مرات الإرسال: ${item.numbers.length}
+</span>
+<br>
+<strong>أسماء أصحابها:</strong>
+<br>
+${item.names.map((name,n)=>
+(n+1)+'. '+esc(name)
+).join('<br>')}
+<br>
+<strong>أرقام الرسائل:</strong>
+${item.numbers.join('، ')}
+</div>
+`;
+
+});
+
+}else{
+
+html+=`
+<div class="duplicate-empty">
+✅ لا توجد كليشات متطابقة بالكامل.
+</div>
+`;
+
+}
+
+html+=`
+<div class="duplicate-empty">
+تم الفحص بنجاح.
+<br>
+يمكنك الآن الضغط على زر «🏆 فرز التوقعات».
+</div>
+
+</div>
+`;
+
+$('duplicateResults').innerHTML=html;
+
+$('duplicateResults').scrollIntoView({
+behavior:'smooth',
+block:'start'
+});
+
 }
 
 // فرز التوقعات
@@ -920,6 +1163,7 @@ alert('تم النسخ.');
 
 // الأزرار الرئيسية
 $('sortBtn').addEventListener('click',runSort);
+$('duplicateBtn').addEventListener('click',checkDuplicates);
 $('liveBtn').addEventListener('click',updateLive);
 
 $('todayStarsBtn').addEventListener('click',extractTodayStars);
